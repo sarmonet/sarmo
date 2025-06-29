@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package com.sarmo.notificationservice;
+
+option java_multiple_files = true;
+option java_package = "com.sarmo.notificationservice.proto";
+option java_outer_classname = "EmailConfirmProto";
+
+service EmailConfirmService {
+  rpc SendEmailConfirmation (EmailRequest) returns (EmailResponse);
+  rpc SendPasswordResetEmail (EmailRequest) returns (EmailResponse);
+  rpc sendOtpEmail(EmailRequest) returns (EmailResponse);
+}
+
+message EmailRequest {
+  string email = 1;
+  string token = 2;
+}
+
+message EmailResponse {
+  bool success = 1;
+  string message = 2;
+}

@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: storage-service
+
+  servlet:
+    multipart:
+      max-file-size: 101MB
+      max-request-size: 101MB
+
+server:
+  port: 8888
+
+app:
+  sarmo:
+    storage:
+      baseUrl: https://sarmo.net/api/v1/storage/
+
+minio:
+  url: http://minio:9000
+  accessKey: minioadmin
+  secretKey: minioadmin
+  videoBucket: video-bucket
+  imageBucket: image-bucket
+  documentBucket: document-bucket
+
+eureka:
+  client:
+    serviceUrl:
+      #defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka-server:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+

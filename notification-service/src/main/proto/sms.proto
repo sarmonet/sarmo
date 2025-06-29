@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package com.sarmo.notificationservice;
+
+option java_multiple_files = true;
+option java_package = "com.sarmo.notificationservice.proto";
+option java_outer_classname = "SmsProto";
+
+service SmsService {
+  rpc SendSms (SmsRequest) returns (SmsResponse);
+}
+
+message SmsRequest {
+  string phone_number = 1;
+  string message = 2;
+}
+
+message SmsResponse {
+  bool success = 1;
+  string message = 2;
+}

@@ -1,0 +1,59 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: content-service
+
+  datasource:
+    url: jdbc:postgresql://content-db:5432/content_service
+    username: content_user
+    password: content_password
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  data:
+    mongodb:
+      uri: mongodb://mongo_user:mongo_password@content-mongo:27017/content_mongo_db?authSource=admin
+
+    redis:
+      host: redis-content
+      port: 6379
+
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: listing-service-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: com.sarmo.kafka.dto
+
+grpc:
+  client:
+    user-service:
+      negotiation-type: plaintext
+
+
+
+eureka:
+  client:
+    serviceUrl:
+      #defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka-server:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus

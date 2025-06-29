@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package com.sarmo.grpc.user;
+
+option java_multiple_files = true;
+option java_package = "com.sarmo.grpc.user";
+option java_outer_classname = "UserProto";
+
+message User {
+  int64 id = 1;
+  string profilePictureUrl = 2;
+  string firstName = 3;
+  string lastName = 4;
+  string email = 5;
+  string phoneNumber = 6;
+}
+
+message SyncRequest {
+}
+
+service UserDataSyncService {
+  rpc StreamAllUsers (SyncRequest) returns (stream User);
+}

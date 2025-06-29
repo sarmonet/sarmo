@@ -1,0 +1,105 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.4.4'
+	id 'io.spring.dependency-management' version '1.1.7'
+	id 'com.google.protobuf' version '0.9.4'
+}
+
+group = 'com.sarmo'
+version = '0.0.1'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+	sourceSets {
+		main {
+			java {
+				srcDir 'src/main/java'
+				srcDir 'build/generated/source/proto/main/java'
+			}
+		}
+	}
+}
+
+repositories {
+	mavenCentral()
+	google()
+	mavenLocal()
+}
+
+ext {
+	set('springCloudVersion', "2024.0.1")
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'io.micrometer:micrometer-registry-prometheus'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5'
+	implementation 'com.nimbusds:nimbus-jose-jwt:10.0.2'
+
+
+	// ----- gRPC Client Dependencies (добавляем их) -----
+	// Spring Boot starter для gRPC клиента (версия из вашего референса)
+	implementation 'net.devh:grpc-client-spring-boot-starter:3.1.0.RELEASE'
+	// gRPC Core, Stub, и Protobuf (версии из вашего референса, соответствуют плагину и user-service)
+	implementation 'io.grpc:grpc-protobuf:1.70.0'
+	implementation 'io.grpc:grpc-stub:1.70.0'
+	implementation 'io.grpc:grpc-core:1.70.0'
+	// Netty - рекомендуемый транспорт для gRPC
+	implementation 'io.grpc:grpc-netty:1.70.0'
+
+	// Protocol Buffers Java Runtime (версия из вашего референса, соответствует версии protoc)
+	implementation 'com.google.protobuf:protobuf-java:4.29.3'
+	implementation 'com.google.protobuf:protobuf-java-util:4.29.3'
+
+	// Обязательные зависимости, которые были в предыдущих примерах, но отсутствуют в предоставленном:
+	implementation 'jakarta.validation:jakarta.validation-api:3.1.1'
+	implementation 'javax.annotation:javax.annotation-api:1.3.2' // Для @PostConstruct, @PreDestroy и других аннотаций
+
+
+	implementation 'jakarta.validation:jakarta.validation-api:3.1.1'
+	implementation 'com.sarmo:sarmo-kafka-dto:1.0'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	implementation 'org.springframework.kafka:spring-kafka'
+	runtimeOnly 'org.postgresql:postgresql'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.kafka:spring-kafka-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+// ----- Конфигурация плагина protobuf ТОЧНО КАК В ВАШЕМ РЕФЕРЕНСЕ (структура-wise) -----
+protobuf {
+	protoc {
+		// Specify the protoc compiler version. (As in your reference, without :exe:${os.detected.classifier})
+		artifact = 'com.google.protobuf:protoc:4.29.3'
+	}
+	plugins {
+		grpc {
+			// Specify the version for the gRPC Java code generator plugin. (As in your reference)
+			artifact = 'io.grpc:protoc-gen-grpc-java:1.70.0'
+		}
+	}
+	generateProtoTasks {
+		all().configureEach { task ->
+			task.plugins {
+				grpc {}
+			}
+			// No lines accessing task.protoSourceSet here, as in your reference build.gradle
+		}
+	}
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

@@ -1,0 +1,66 @@
+server:
+  port: 8088
+
+spring:
+  application:
+    name: chat-service
+
+  datasource:
+    url: jdbc:postgresql://chat-db:5432/chat_db
+    username: chat_user
+    password: chat_password
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+
+  data:
+    mongodb:
+      uri: mongodb://chat_mongo_user:chat_mongo_password@mongo-chat:27017/chat_mongo_db?authSource=admin
+
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: chat-service-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: com.sarmo.kafka.dto
+grpc:
+  client:
+    user-service:
+      negotiation-type: plaintext
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+logging:
+  level:
+    org:
+      springframework:
+        messaging: DEBUG
+        web:
+          socket: DEBUG
+        security:
+          messaging:
+            access:
+              intercept: DEBUG
+    com:
+      sarmo:
+        chatservice: DEBUG # Ваш пакет
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka-server:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true

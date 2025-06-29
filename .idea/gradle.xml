@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/api-gateway" />
+            <option value="$PROJECT_DIR$/auth-service" />
+            <option value="$PROJECT_DIR$/chat-service" />
+            <option value="$PROJECT_DIR$/eureka-server" />
+            <option value="$PROJECT_DIR$/listing-service" />
+            <option value="$PROJECT_DIR$/notice-service" />
+            <option value="$PROJECT_DIR$/notification-service" />
+            <option value="$PROJECT_DIR$/referral-service" />
+            <option value="$PROJECT_DIR$/sarmo-kafka-dto" />
+            <option value="$PROJECT_DIR$/storage-service" />
+            <option value="$PROJECT_DIR$/subscription-service" />
+            <option value="$PROJECT_DIR$/user-service" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/notice-service" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/notice-service" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/notification-service" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/notification-service" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/referral-service" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/referral-service" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/storage-service" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/storage-service" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/subscription-service" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/subscription-service" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/user-service" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/user-service" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

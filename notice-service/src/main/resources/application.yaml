@@ -1,0 +1,59 @@
+server:
+  port: 8087
+
+spring:
+  application:
+    name: notice-service
+
+  datasource:
+    #    url: jdbc:postgresql://localhost:5432/user_db
+    url: jdbc:postgresql://notice-db:5432/notice_db
+    username: notice_root
+    password: notice_password
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: notice-service-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: com.sarmo.kafka.dto
+
+grpc:
+  client:
+    user-service:
+      negotiation-type: plaintext
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+
+eureka:
+  client:
+    serviceUrl:
+      # defaultZone: http://localhost:8761/eureka/ # ???? ????? ????????
+      defaultZone: http://eureka-server:8761/eureka/ # ???? ???????????? eureka ? docker compose
+    register-with-eureka: true
+    fetch-registry: true
+
+
+listing:
+  service:
+    url: http://listing-service:8083
+
+catalog:
+  url: https://sarmo.net/catalog

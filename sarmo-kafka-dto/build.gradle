@@ -1,0 +1,53 @@
+plugins {
+    id 'java'
+    id 'org.gradle.wrapper'
+    id 'maven-publish'
+}
+
+group = 'com.sarmo'
+version = '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.17.0'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+jar {
+    archiveBaseName = 'sarmo-kafka-dto'
+}
+
+//publishing {
+//    repositories {
+//        maven {
+//            url = uri("$rootDir/mavenLocalRepo") // Указываем путь к локальному репозиторию
+//        }
+//    }
+//    publications {
+//        mavenJava(MavenPublication) {
+//            groupId = project.group
+//            artifactId = 'sarmo-kafka-dto'
+//            version = project.version
+//            from components.java
+//        }
+//    }
+//}
+
+publishing {
+    repositories {
+        mavenLocal()
+    }
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}

@@ -1,0 +1,145 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.4.3' // Your Spring Boot version
+    id 'io.spring.dependency-management' version '1.1.7' // Your Dependency Management version
+    // Add the Protocol Buffers plugin
+    id 'com.google.protobuf' version '0.9.4'
+    id 'maven-publish' // From your reference
+}
+
+group = 'com.sarmo' // Your group
+version = '0.0.1' // Your version
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21) // Your Java version
+    }
+    sourceSets {
+        main {
+            java {
+                // Add generated gRPC and Protobuf sources to the compilation path
+                // Assuming default location for generated code
+                srcDir 'src/main/java'
+                srcDir 'build/generated/source/proto/main/java'
+                srcDir 'build/generated/source/proto/main/grpc' // Added this line based on previous attempt, keep it for now
+            }
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    // Add Google repository, required for Protobuf and gRPC artifacts
+    google()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:2024.0.0" // Your Spring Cloud version
+    }
+}
+
+dependencies {
+    // ----- Your existing dependencies (based on previous shares) -----
+    implementation 'com.sarmo:sarmo-kafka-dto:1.0' // Example of your dependency
+    implementation 'org.springframework.kafka:spring-kafka'
+
+    // Spring Boot Starters
+    implementation 'org.springframework.boot:spring-boot-starter-webflux' // If used
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5'
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf' // If used
+
+    // Jackson dependencies
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'com.fasterxml.jackson.core:jackson-core'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.3'
+
+    // JWT dependencies
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+    // Spring Boot Web for REST API
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // Spring Security and OAuth2 Authorization Server
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-authorization-server'
+    implementation 'org.springframework.security:spring-security-oauth2-client'
+    implementation 'org.springframework.security:spring-security-oauth2-core'
+
+    // Spring Security Crypto
+    implementation 'org.springframework.security:spring-security-crypto'
+
+    // ----- Database Dependencies -----
+    // Spring Boot Data JPA (for PostgreSQL User entity)
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    runtimeOnly 'org.postgresql:postgresql'
+
+    // Spring Boot Data MongoDB (!!! ADDED THIS DEPENDENCY !!!)
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
+    // Spring Boot Data Redis (if used)
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // Validation
+    implementation 'jakarta.validation:jakarta.validation-api:3.1.1'
+    implementation 'javax.annotation:javax.annotation-api:1.3.2' // From your reference
+
+    // Spring Boot Actuator for monitoring
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+
+    // gRPC Server Dependencies (for user data sync)
+    implementation 'net.devh:grpc-server-spring-boot-starter:3.1.0.RELEASE' // Match other services version
+    implementation 'io.grpc:grpc-netty:1.70.0' // Match other services version
+
+    // Protocol Buffers (protobuf) & gRPC API (versions must match protoc and plugin)
+    implementation 'com.google.protobuf:protobuf-java:4.29.3' // Match protoc version
+    implementation 'com.google.protobuf:protobuf-java-util:4.29.3'
+    implementation 'io.grpc:grpc-protobuf:1.70.0' // Match plugin version
+    implementation 'io.grpc:grpc-stub:1.70.0' // Match plugin version
+    implementation 'io.grpc:grpc-core:1.70.0' // Match plugin version
+
+    // TODO: If proto files are in a common module, add a dependency here:
+    // implementation project(':your-protobuf-common-module')
+
+    // ----- Test dependencies -----
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+// ----- Protobuf Plugin Configuration (structure based on your reference) -----
+protobuf {
+    protoc {
+        // Specify the protoc compiler version. (As in your reference, without :exe:${os.detected.classifier})
+        artifact = 'com.google.protobuf:protoc:4.29.3'
+    }
+    plugins {
+        grpc {
+            // Specify the version for the gRPC Java code generator plugin. (As in your reference)
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.70.0'
+        }
+    }
+    generateProtoTasks {
+        all().configureEach { task ->
+            task.plugins {
+                grpc {}
+            }
+        }
+    }
+}
+
+// From your reference
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs << "-Xlint:unchecked"
+}
+
+// From your reference
+tasks.named('test') {
+    useJUnitPlatform()
+}

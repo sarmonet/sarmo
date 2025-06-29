@@ -1,0 +1,84 @@
+spring:
+  application:
+    name: listing-service
+
+  datasource:
+    url: jdbc:postgresql://listing-db:5432/listings_db
+#    url: jdbc:postgresql://localhost:5432/listings_db
+    username: listings_user
+    password: listings_password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  data:
+    mongodb:
+      uri: mongodb://root:rootpassword@mongo:27017/listings_db?authSource=admin
+#      uri: mongodb://root:rootpassword@localhost:27017/listings_db?authSource=admin
+    redis:
+      host: redis
+      port: 6379
+
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: listing-service-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: com.sarmo.kafka.dto
+
+
+server:
+  port: 8083
+
+logging:
+  level:
+    com:
+      sarmo:
+        listingservice:
+          decoder: DEBUG
+          service: DEBUG
+          controller: DEBUG
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+      springframework:
+        data:
+          mongodb: DEBUG
+
+
+eureka:
+  client:
+    serviceUrl:
+      #defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka-server:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+
+sarmo:
+  app:
+    base-url: https://sarmo.net
+
+
+google:
+  cloud:
+    project:
+      id: sarmo-social-login
+    credentials:
+      location: file:./sarmo-translate-key.json

@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: subscription-service
+
+
+  datasource:
+    #    url: jdbc:postgresql://localhost:5433/auth_db
+    url: jdbc:postgresql://sub-db:5432/sub_db
+    username: sub_user
+    password: sub_password
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: user-service-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: com.sarmo.kafka.dto
+
+eureka:
+  client:
+    serviceUrl:
+      #      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka-server:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+
+server:
+  port: 8086
+
+

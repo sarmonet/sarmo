@@ -1,0 +1,15 @@
+rootProject.name = 'sarmo-project'
+
+include 'auth-service'
+include 'user-service'
+include 'listing-service'
+include 'notification-service'
+include 'subscription-service'
+include 'referral-service'
+include 'notice-service'
+include 'chat-service'
+include 'storage-service'
+include 'eureka-server'
+include 'api-gateway'
+include 'sarmo-kafka-dto'
+

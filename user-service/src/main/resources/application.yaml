@@ -1,0 +1,80 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: user-service
+
+  datasource:
+#    url: jdbc:postgresql://localhost:5432/user_db
+    url: jdbc:postgresql://user-db:5432/user_db
+    username: user_root
+    password: user_password
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+
+  data:
+    mongodb:
+      uri: mongodb://user_root:user_password@mongo-user:27017/user_db?authSource=admin
+    # uri: mongodb://user_root:user_password@localhost:27017/user_db?authSource=admin
+
+  kafka:
+    bootstrap-servers: kafka:9092
+    consumer:
+      group-id: user-service-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: com.sarmo.kafka.dto
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+grpc:
+  server:
+    port: 9090
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+
+logging:
+  level:
+    com:
+      sarmo:
+        userservice:
+          jwt: DEBUG
+          service: DEBUG
+          controller: DEBUG
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+      springframework:
+        data:
+          mongodb: DEBUG
+
+eureka:
+  client:
+    serviceUrl:
+      # defaultZone: http://localhost:8761/eureka/ # Если нужно локально
+      defaultZone: http://eureka-server:8761/eureka/ # Если используется eureka в docker compose
+    register-with-eureka: true
+    fetch-registry: true
+
