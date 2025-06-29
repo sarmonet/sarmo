@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://reach-ua.mbit-consultants.com
+
+# Sitemaps
+Sitemap: https://reach-ua.mbit-consultants.com/sitemap.xml
